@@ -10,21 +10,24 @@ namespace VoicemeeterAudioCallbackExample
     {
         public static RemoteApiExtender remote;
 
-        unsafe public static Int32 DoNothingWithAudio64(void* customDataP, Command command, void* callbackDataP, Int32 addData)
+        unsafe public static Int32 AudioPassthrough64(void* customDataP, Command command, void* callbackDataP, Int32 addData)
         {
             switch (command)
             {
+                // Because of Mode.Inputs
                 case Command.BufferIn:
                     var audioBufferP = (AudioBuffer64*)callbackDataP;
                     var samplesNumber = audioBufferP->samplesPerFrame;
                     var outputsNumber = audioBufferP->outputsNumber;
                     Single* inFrame, outFrame;
+                    // number of input and output channels match in this case
                     for (int channel = 0; channel < outputsNumber; channel++)
                     {
                         inFrame = (Single*)audioBufferP->inBufferP[channel];
                         outFrame = (Single*)audioBufferP->outBufferP[channel];
                         for (int i = 0; i < samplesNumber; i++)
                         {
+                            // without assignment there will be no audio
                             outFrame[i] = inFrame[i];
                         }
                     }
@@ -33,7 +36,7 @@ namespace VoicemeeterAudioCallbackExample
             return 0;
         }
 
-        unsafe public static Int32 DoNothingWithAudio32(void* customDataP, Command command, void* callbackDataP, Int32 addData)
+        unsafe public static Int32 AudioPassthrough32(void* customDataP, Command command, void* callbackDataP, Int32 addData)
         {
             switch (command)
             {
@@ -63,10 +66,10 @@ namespace VoicemeeterAudioCallbackExample
             // Registering callback to process inputs only
             if (Environment.Is64BitProcess)
             {
-                resp = remote.AudioCallbackRegister(Mode.Inputs, DoNothingWithAudio64, null, ref clientName);
+                resp = remote.AudioCallbackRegister(Mode.Inputs, AudioPassthrough64, null, ref clientName);
             } else
             {
-                resp = remote.AudioCallbackRegister(Mode.Inputs, DoNothingWithAudio32, null, ref clientName);
+                resp = remote.AudioCallbackRegister(Mode.Inputs, AudioPassthrough32, null, ref clientName);
             }
             Console.WriteLine($"REGISTER AUDIO CALLBACK: response {resp}, NAME: {clientName}");
             if (resp != 0) return;

@@ -1,4 +1,4 @@
-# Voicemeeter AudioCallback Simple Example
+# Voicemeeter Audio Callback C# Simple Example
  Shows how to write audio callback for Voicemeeter API in unsafe C# context
  
  ## Depends on these Shared Visual Studio Projects:

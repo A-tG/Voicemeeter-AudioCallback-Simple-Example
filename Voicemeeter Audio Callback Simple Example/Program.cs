@@ -22,12 +22,14 @@ namespace VoicemeeterAudioCallbackExample
                     var audioBufferP = (AudioBuffer64*)callbackDataP;
                     var samplesNumber = audioBufferP->samplesPerFrame;
                     var outputsNumber = audioBufferP->outputsNumber;
+                    var inBufferP = audioBufferP->inBufferP;
+                    var outBufferP = audioBufferP->outBufferP;
                     Single* inFrame, outFrame;
                     // number of input and output channels match in this case
                     for (int channel = 0; channel < outputsNumber; channel++)
                     {
-                        inFrame = (Single*)audioBufferP->inBufferP[channel];
-                        outFrame = (Single*)audioBufferP->outBufferP[channel];
+                        inFrame = (Single*)inBufferP[channel];
+                        outFrame = (Single*)outBufferP[channel];
                         for (int i = 0; i < samplesNumber; i++)
                         {
                             // without assignment there will be no audio
@@ -41,19 +43,27 @@ namespace VoicemeeterAudioCallbackExample
 
         unsafe public static Int32 AudioPassthrough32(void* customDataP, Command command, void* callbackDataP, Int32 addData)
         {
+            // API's Audio Callback system is quite reliable.
+            // If this code throw exception or executed too slow (IO operations, or even debugging)
+            // Voicemeeter just skip it and stream sound without any processing from callback.
             switch (command)
             {
+                // only BufferIn case because of Mode.Inputs
                 case Command.BufferIn:
                     var audioBufferP = (AudioBuffer32*)callbackDataP;
                     var samplesNumber = audioBufferP->samplesPerFrame;
                     var outputsNumber = audioBufferP->outputsNumber;
+                    var inBufferP = audioBufferP->inBufferP;
+                    var outBufferP = audioBufferP->outBufferP;
                     Single* inFrame, outFrame;
+                    // number of input and output channels match in this case
                     for (int channel = 0; channel < outputsNumber; channel++)
                     {
-                        inFrame = (Single*)audioBufferP->inBufferP[channel];
-                        outFrame = (Single*)audioBufferP->outBufferP[channel];
+                        inFrame = (Single*)inBufferP[channel];
+                        outFrame = (Single*)outBufferP[channel];
                         for (int i = 0; i < samplesNumber; i++)
                         {
+                            // without assignment there will be no audio
                             outFrame[i] = inFrame[i];
                         }
                     }

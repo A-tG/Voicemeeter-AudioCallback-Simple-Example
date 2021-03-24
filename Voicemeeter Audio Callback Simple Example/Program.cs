@@ -12,9 +12,12 @@ namespace VoicemeeterAudioCallbackExample
 
         unsafe public static Int32 AudioPassthrough64(void* customDataP, Command command, void* callbackDataP, Int32 addData)
         {
+            // API's Audio Callback system is quite reliable.
+            // If this code throw exception or executed too slow (IO operations, or even debugging)
+            // Voicemeeter just skip it and stream sound without any processing from callback.
             switch (command)
             {
-                // Because of Mode.Inputs
+                // only BufferIn case because of Mode.Inputs
                 case Command.BufferIn:
                     var audioBufferP = (AudioBuffer64*)callbackDataP;
                     var samplesNumber = audioBufferP->samplesPerFrame;

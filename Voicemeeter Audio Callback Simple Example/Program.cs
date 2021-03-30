@@ -86,8 +86,12 @@ namespace VoicemeeterAudioCallbackExample
             }
             Console.WriteLine($"REGISTER AUDIO CALLBACK: response {resp}, NAME: {clientName}");
             if (resp != 0) return;
+            // Without Sleep() between AudioCallbackRegister() and AudioCallbackStart()
+            // there is small chance that the audio might become corrupted.
+            Sleep(20);
             resp = remote.AudioCallbackStart();
             Console.WriteLine($"START AUDIO CALLBACK: response {resp}");
+            // Process audio for N ms
             Sleep(5000);
             resp = remote.AudioCallbackStop();
             Console.WriteLine($"STOP AUDIO CALLBACK: response {resp}");
@@ -103,6 +107,7 @@ namespace VoicemeeterAudioCallbackExample
             }
             catch (Exception e)
             {
+                // if cannot load dll or procedures
                 Console.WriteLine($"{e.GetType()}\n{e.Message}");
                 Console.ReadKey();
                 Environment.Exit(1);
@@ -117,12 +122,14 @@ namespace VoicemeeterAudioCallbackExample
             }
             try
             {
-                resp = remote.WaitForNewParams(5000);
+                resp = remote.WaitForNewParams(1000);
                 Console.WriteLine($"WaitForUpdate: {resp}");
+                // Do stuff with Remote API
                 TestAudioCallback();
             }
             finally
             {
+                // If exception is thrown program supposed to successfully Logout
                 remote.AudioCallbackUnregister();
                 Console.WriteLine($"AUDIO CALLBACK UNREGISTER: {resp}");
                 resp = remote.Logout();

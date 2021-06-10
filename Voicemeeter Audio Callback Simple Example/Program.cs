@@ -74,7 +74,7 @@ namespace VoicemeeterAudioCallbackExample
 
         static unsafe void TestAudioCallback()
         {
-            string clientName = "Console Observer Callback Test";
+            string clientName = "Simple Audio Callback Test";
             int resp;
             // Registering callback to process inputs only
             if (Environment.Is64BitProcess)

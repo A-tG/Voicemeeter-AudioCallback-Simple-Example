@@ -66,6 +66,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnmanagedLibWrap, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\a-tg.UnmanagedLibWrap.1.0.0\lib\net40\UnmanagedLibWrap.dll</HintPath>
+    </Reference>
+    <Reference Include="VmrapiDynWrap, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\a-tg.VmrapiDynWrap.1.0.0\lib\net40\VmrapiDynWrap.dll</HintPath>
+    </Reference>
+    <Reference Include="VmrapiDynWrapExt, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\a-tg.VmrapiDynWrapExt.1.0.0\lib\net40\VmrapiDynWrapExt.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -73,9 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="..\..\dll wrapper base\dll wrapper base\dll wrapper base.projitems" Label="Shared" />
-  <Import Project="..\..\voicemeeter remote api wrap\voicemeeter remote api wrap\voicemeeter remote api wrap.projitems" Label="Shared" />
-  <Import Project="..\..\voicemeeter remote api extended\voicemeeter remote api extended\voicemeeter remote api extended.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
